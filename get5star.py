@@ -9,18 +9,18 @@ from requesthash import *
 urllib3.disable_warnings()  # 方便抓包
 
 def get5star(X_STAR_SESSION_ID, goalnum, playerid=None, chaidlist=None,
-             firstflag=1):  # id,目标数，期望角色（仅限五星,传入ID,见str.py,list形式），playerid,是否第一次
+             firstflag=False):  # id,目标数，期望角色（仅限五星,传入ID,见str.py,list形式），playerid,是否第一次
     api1 = 'player/gacha/draw'
     payload1 = '{"gachaId":1,"drawType":3,"stepCode":0,"reDraw":true}'
     payload2 = '{"gachaId":1,"drawType":3,"stepCode":4,"reDraw":false}'  # python生成的json服务器不认，原因未知
     urhttp = urllib3.ProxyManager(http_proxy)
     while True:
         star5num = 0
-        if firstflag == 1:  # 第一次无限十连请求值有所不同，检测选择
+        if firstflag == False:  # 第一次无限十连请求值有所不同，检测选择
             payloadc = payload1
         else:
             payloadc = payload2
-            firstflag = 1
+            firstflag = True
         header = collections.OrderedDict(
             [('Unity-User-Agent', 'app/0.0.0; Android OS 7.1.1 / API-25 NMF26F/7.11.16; Xiaomi MI MIX 2'),
              ('X-STAR-REQUESTHASH', getrequesthash(api1, sessionID=X_STAR_SESSION_ID, json1=payloadc)),
