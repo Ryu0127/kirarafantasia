@@ -7,10 +7,6 @@ from str import *
 from requesthash import *
 
 urllib3.disable_warnings()  # 方便抓包
-http_proxy = 'http://127.0.0.1:8888/'
-
-
-
 
 def get5star(X_STAR_SESSION_ID, goalnum, playerid=None, chaidlist=None,
              firstflag=1):  # id,目标数，期望角色（仅限五星,传入ID,见str.py,list形式），playerid,是否第一次
