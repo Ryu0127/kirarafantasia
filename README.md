@@ -1,2 +1,2 @@
-# kirarafantasia
 为了学习python的练习项目
+新手初学python的项目，可能有许多问题，还请各位大神指导。
