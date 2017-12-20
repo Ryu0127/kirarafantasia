@@ -1,3 +1,4 @@
+# 抽卡
 # import requests
 import collections
 import json
@@ -6,16 +7,19 @@ from str import *
 from requesthash import *
 
 urllib3.disable_warnings()  # 方便抓包
+http_proxy = 'http://127.0.0.1:8888/'
 
 
-def get5star(X_STAR_SESSION_ID, goalnum, firstflag=1):
+
+
+def get5star(X_STAR_SESSION_ID, goalnum, playerid=None, chaidlist=None,
+             firstflag=1):  # id,目标数，期望角色（仅限五星,传入ID,见str.py,list形式），playerid,是否第一次
     api1 = 'player/gacha/draw'
     payload1 = '{"gachaId":1,"drawType":3,"stepCode":0,"reDraw":true}'
-    payload2 = '{"gachaId":1,"drawType":3,"stepCode":4,"reDraw":false}'
-
-    urhttp = urllib3.PoolManager()
-    star5num = 0
-    while star5num < goalnum:
+    payload2 = '{"gachaId":1,"drawType":3,"stepCode":4,"reDraw":false}'  # python生成的json服务器不认，原因未知
+    urhttp = urllib3.ProxyManager(http_proxy)
+    while True:
+        star5num = 0
         if firstflag == 1:  # 第一次无限十连请求值有所不同，检测选择
             payloadc = payload1
         else:
@@ -32,25 +36,37 @@ def get5star(X_STAR_SESSION_ID, goalnum, firstflag=1):
              ('Host', 'krr-prd.star-api.com'),
              ('Connection', 'Keep-Alive'),
              ('Accept-Encoding', 'gzip')])
-        star5num = 0
         # req = requests.session()
         # a = req.post(url1,headers = header,data =payload1 ,verify=False).json() #速度有点慢
         try:
-            a = urhttp.request('post', api_host + api1, headers=header, body=payloadc,retries = 10)
+            a = urhttp.request('post', api_host + api1, headers=header, body=payloadc, retries=10)
             a = json.loads(a.data.decode('utf-8'))
         except:
-            print("网络故障，或服务器炸了")
-            return ['failed','']
+            print("网络故障，或服务器炸了,请检查str.py代理配置")
+            return ['failed', '']
         try:
             b = a['managedCharacters']
         except:
-            print("无数据 可能是hash有误")
-            return ['failed','']
-        d = []
-        for c  in b:
-            d.append(c['levelLimit'])
-        for e in d:
-            if e == 50:
-                star5num+=1
-        print("本轮数量："+str(star5num))
-    return ['success',a]
+            print("无数据")
+            return ['failed', '']
+        chaid = []
+        starum = 0
+        for c in b:
+            if c['levelLimit'] == 50:
+                star5num += 1
+                chaid.append(c['characterId'])
+        if playerid is not None:
+            playeridstr = "playerid:" + str(playerid) + "       "
+        else:
+            playeridstr = ''
+        cnamestr = ''
+        for cname in chaid:
+            cnamestr = cnamestr +'  '+chaname[str(cname)]
+        if cnamestr == None:
+            cnamestr = "无"
+        print(playeridstr + "本轮数量：" + str(star5num) + '  角色：' + cnamestr)
+        if  chaidlist != None:
+            if set(chaid) >= set(chaidlist) and star5num >= goalnum:
+                return ['success', a]
+        elif star5num >= goalnum:
+            return ['success', a]
