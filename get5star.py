@@ -58,7 +58,7 @@ def get5star(X_STAR_SESSION_ID, goalnum, playerid=None, chaidlist=None,
         cnamestr = ''
         for cname in chaid:
             cnamestr = cnamestr +'  '+chaname[str(cname)]
-        if cnamestr == None:
+        if cnamestr == '':
             cnamestr = "无"
         print(playeridstr + "本轮数量：" + str(star5num) + '  角色：' + cnamestr)
         if  chaidlist != None:
