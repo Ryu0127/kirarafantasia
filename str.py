@@ -1,7 +1,8 @@
 #通用变量
 X_STAR_AB = '3'
 api_host = 'https://krr-prd.star-api.com/api/'
-http_proxy = 'http://127.0.0.1:8888/'
+proxycontrol = True
+http_proxy = 'http://127.0.0.1:1082'
 chaname = {
     "11002000":"柚子",
     "13002000":"透",
