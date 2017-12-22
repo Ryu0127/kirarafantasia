@@ -1,4 +1,5 @@
 from get5star import *
+
 def card():
     session = input("sessionid:")
     num = int(input("目标数量:"))
@@ -15,10 +16,10 @@ def card():
             chaidin.append(int(ii))
     else:
         chaidin = None
-    while  ctr!= 'success':
+    while  ctr!= 0:
         success1 = get5star(session,goalnum=num,firstflag=FIRST1,chaidlist=chaidin)
         ctr = success1[0]
-        
+
 if __name__ == "__main__":
     try:
         card()
