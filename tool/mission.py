@@ -15,6 +15,7 @@ def doallmission(sessionid):#一键完成当前所有任务(重复执行即可�
     jsonstr = '{"missionLogs":[{"managedMissionId":%s,"missionID":%s,"subCode":0,"rate":1,' \
               '"rateMax":1,"state":2,"reward":null,"limitTime":"2017-12-23T23:59:59"}]}'
     errmsid = []
+    cgc = 0
     for req in notdomission:
         api2 = 'player/mission/set'
         Torequest(api2,payload= jsonstr % (req[0],req[1]),sessionid =sessionid)
@@ -22,6 +23,10 @@ def doallmission(sessionid):#一键完成当前所有任务(重复执行即可�
             api3 = 'player/mission/complete'
             jsonstr2 = '{"managedMissionId":%s}'% req[0]
             Torequest(api3 ,jsonstr2,sessionid)
+            cgc += 1
+            if cgc ==90:#防到99自动清除
+                getallgift(sessionid)
+                cgc = 0
         except ValueError:
          errmsid.append(req[0])
     getallgift(sessionid)
