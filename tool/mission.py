@@ -1,5 +1,4 @@
-from misc import *
-from config import  *
+from account import *
 
 #仅供测试 不保证有效性 only for testing
 #迟早会被封,所以没搞啥伪装(并不是因为懒
@@ -25,6 +24,7 @@ def doallmission(sessionid):#一键完成当前所有任务(重复执行即可�
             Torequest(api3 ,jsonstr2,sessionid)
         except ValueError:
          errmsid.append(req[0])
+    getallgift(sessionid)
     if not errmsid:
         return [0]
     else:

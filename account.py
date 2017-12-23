@@ -36,3 +36,16 @@ def getacetokenfromCC(mc,mp):
     payload = '{"moveCode":"%s","movePassword":"%s","uuid":"%s","platform":2}'%(mc,mp,uuidg)
     rep = Torequest(api,payload)
     return [0,rep['accessToken'],uuidg]
+
+def getallgift(sessionid):
+    api = 'player/present/get_all'
+    rep = Torequest(api,sessionid = sessionid,method = 'GET')
+    pidl = []
+    for pid in rep['presents']:
+        pidl.append(pid['managedPresentId'])
+    if not pidl:
+        return [1]
+    pidl = str(pidl)[1:-1]
+    api2 = 'player/present/get?managedPresentId='+pidl.replace(" ","")+'&stepCode=0'
+    Torequest(api2,sessionid =sessionid,method='GET')
+    return [0]
