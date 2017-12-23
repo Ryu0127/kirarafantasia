@@ -28,7 +28,7 @@ def doallmission(sessionid):#一键完成当前所有任务(重复执行即可�
                 getallgift(sessionid)
                 cgc = 0
         except ValueError:
-         errmsid.append(req[0])
+            errmsid.append(req[0])
     getallgift(sessionid)
     if not errmsid:
         return [0]
