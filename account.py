@@ -1,7 +1,6 @@
 import uuid
 from misc import *
 from config import *
-import requests
 
 #python生成的json服务器似乎不认
 
@@ -30,3 +29,10 @@ def getcontinuecode(sessionID):
         return [0, rep['moveCode'],password]
     except:
         return [-1,rep]
+
+def getacetokenfromCC(mc,mp):
+    api = 'player/move/set'
+    uuidg = str(uuid.uuid1())
+    payload = '{"moveCode":"%s","movePassword":"%s","uuid":"%s","platform":2}'%(mc,mp,uuidg)
+    rep = Torequest(api,payload)
+    return [0,rep['accessToken'],uuidg]

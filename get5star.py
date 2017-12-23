@@ -32,7 +32,7 @@ def get5star(X_STAR_SESSION_ID, goalnum, playerid=None, chaidlist=None,
             a = urhttp.request('post', api_host + api1, headers=header, body=payloadc, retries=10)
             a = json.loads(a.data.decode('utf-8'))
         except:
-            print("网络故障，或服务器炸了,请检查str.py代理配置")
+            print("网络故障，或服务器炸了,请检查config.py代理配置")
             return [-1]
         try:
             b = a['managedCharacters']

@@ -2,7 +2,10 @@ import hashlib
 import collections
 import random
 import requests
+import urllib3
 from config import *
+
+urllib3.disable_warnings()
 
 def getrequesthash(api,sessionID = None,json1 = None):
     REQUESTHASH_SECRET = "85af4a94ce7a280f69844743212a8b867206ab28946e1e30e6c1a10196609a11"
@@ -45,7 +48,7 @@ def getheader(apiurl,reqjson=None,X_STAR_SESSION_ID=None):
     return header
 
 def getrangestr(count):
-    seed = "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()_+=-"
+    seed = "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
     sa = []
     for i in range(count):
         sa.append(random.choice(seed))
@@ -58,13 +61,17 @@ def checkproxy():
     else:
         return None
 
-def Torequest(api,payload=None,sessionid=None):
+def Torequest(api,payload=None,sessionid=None,method = 'POST'):
     header = getheader(api,payload,sessionid)
     try:
-        json1 = requests.post(api_host+api,data=payload,headers = header,verify = False,proxies = checkproxy()).json()
+        if method == 'POST':
+            json1 = requests.post(api_host+api,data=payload,headers = header,verify = False,proxies = checkproxy()).json()
+        else:
+            json1 = requests.get(api_host+api,headers = header,verify = False,proxies = checkproxy()).json()
+        check = json1['resultCode']
     except:
         raise ValueError("网络错误")
-    if json1['resultCode'] != 0:
+    if check != 0:
         try:
             error = errorlist[str(json1['resultCode'])]
         except:
