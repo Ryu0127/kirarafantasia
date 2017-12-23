@@ -3,7 +3,7 @@
 import json
 import urllib3
 from misc import *
-from str import proxycontrol
+from config import proxycontrol
 
 urllib3.disable_warnings()  # 方便抓包
 

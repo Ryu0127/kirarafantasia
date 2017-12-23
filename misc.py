@@ -1,7 +1,8 @@
 import hashlib
 import collections
 import random
-from str import *
+import requests
+from config import *
 
 def getrequesthash(api,sessionID = None,json1 = None):
     REQUESTHASH_SECRET = "85af4a94ce7a280f69844743212a8b867206ab28946e1e30e6c1a10196609a11"
@@ -50,3 +51,24 @@ def getrangestr(count):
         sa.append(random.choice(seed))
     salt = ''.join(sa)
     return salt
+
+def checkproxy():
+    if proxycontrol == True:
+        return {'http':http_proxy}
+    else:
+        return None
+
+def Torequest(api,payload=None,sessionid=None):
+    header = getheader(api,payload,sessionid)
+    try:
+        json1 = requests.post(api_host+api,data=payload,headers = header,verify = False,proxies = checkproxy()).json()
+    except:
+        raise ValueError("网络错误")
+    if json1['resultCode'] != 0:
+        try:
+            error = errorlist[str(json1['resultCode'])]
+        except:
+            error = "未知错误："+ str(json1['resultCode'])
+        raise ValueError(error)
+    else:
+        return json1
