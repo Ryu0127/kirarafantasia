@@ -10,7 +10,6 @@ global sessionid
 
 def do1():#初始刷取
     print("请确保拥有一个良好的网络环境,config.py配置正确")
-    print("整个过程大概耗时:45分钟，根据网络情况而定")
     time.sleep(1)
     print("正在注册账号...")
     a = account.signup()
