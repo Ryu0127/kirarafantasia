@@ -2,7 +2,7 @@ from account import *
 
 #仅供测试 不保证有效性 only for testing
 #迟早会被封,所以没搞啥伪装(并不是因为懒
-#！！！已失效！！！
+#！！！已失效！！！ --2017.12.24
 
 def doallmission(sessionid):#一键完成当前所有任务(重复执行即可完成所有任务))
     api1 = 'player/mission/get_all'
