@@ -8,7 +8,8 @@ from config import proxycontrol
 urllib3.disable_warnings()  # 方便抓包
 
 def get5star(X_STAR_SESSION_ID, goalnum, playerid=None, chaidlist=None,
-             firstflag=False):  # id,目标数，期望角色（仅限五星,传入ID,见str.py,list形式），playerid,是否第一次
+             firstflag=False,buguse = False):  # id,目标数，期望角色（仅限五星,传入ID,见str.py,list形式），
+    # playerid,是否第一次,是否用bug
     #eg:chalist = [111,222]
     api1 = 'player/gacha/draw'
     payload1 = '{"gachaId":1,"drawType":3,"stepCode":0,"reDraw":true}'
@@ -22,9 +23,11 @@ def get5star(X_STAR_SESSION_ID, goalnum, playerid=None, chaidlist=None,
         star5num = 0
         if firstflag == False:  # 第一次无限十连请求值有所不同，检测选择 Test for the first time
             payloadc = payload1
+        elif buguse == False:
+            payloadc = payload2
+            firstflag = False
         else:
             payloadc = payload2
-            firstflag = True
         header = getheader(apiurl=api1,X_STAR_SESSION_ID=X_STAR_SESSION_ID,reqjson=payloadc)
         # req = requests.session()
         # a = req.post(url1,headers = header,data =payload1 ,verify=False).json() #速度有点慢 speed is slow
@@ -59,3 +62,17 @@ def get5star(X_STAR_SESSION_ID, goalnum, playerid=None, chaidlist=None,
                 return [0, a]
         elif star5num >= goalnum:
             return [0, a]
+
+
+def normalgacha(X_STAR_SESSION_ID):  # 普通的抽卡，返回4星和5星的总数
+    api = 'player/gacha/draw'
+    payload2 = '{"gachaId":4,"drawType":3,"stepCode":0,"reDraw":false}'
+    rep = Torequest(api,payload2,X_STAR_SESSION_ID)
+    four = 0
+    five = 0
+    for i in rep['managedCharacters']:
+        if i['levelLimit'] == 50:
+            five += 1
+        if i['levelLimit'] == 40:
+            four += 1
+    return [0,four,five]
