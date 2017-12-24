@@ -2,6 +2,7 @@ from account import *
 
 #仅供测试 不保证有效性 only for testing
 #迟早会被封,所以没搞啥伪装(并不是因为懒
+#！！！已失效！！！
 
 def doallmission(sessionid):#一键完成当前所有任务(重复执行即可完成所有任务))
     api1 = 'player/mission/get_all'
@@ -9,16 +10,17 @@ def doallmission(sessionid):#一键完成当前所有任务(重复执行即可�
     notdomission = []
     for mission in rep1['missionLogs']:
         if mission['state'] != 99:
-            notdomission.append([mission['managedMissionId'],mission['missionId']])
+            notdomission.append([mission['managedMissionId'],mission['missionId'],mission['subCode'],
+                                 mission['rate'],mission['rateMax'],mission['limitTime']])
     if not notdomission:
         return [1,"all mission has done"]
-    jsonstr = '{"missionLogs":[{"managedMissionId":%s,"missionID":%s,"subCode":0,"rate":1,' \
-              '"rateMax":1,"state":2,"reward":null,"limitTime":"2017-12-23T23:59:59"}]}'
+    jsonstr = '{"missionLogs":[{"managedMissionId":%s,"missionID":%s,"subCode":%s,"rate":99,' \
+              '"rateMax":%s,"state":1,"reward":null,"limitTime":"%s"}]}'
     errmsid = []
     cgc = 0
     for req in notdomission:
         api2 = 'player/mission/set'
-        Torequest(api2,payload= jsonstr % (req[0],req[1]),sessionid =sessionid)
+        Torequest(api2,payload= jsonstr % (req[0],req[1],req[2],req[4],req[5]),sessionid =sessionid)
         try:
             api3 = 'player/mission/complete'
             jsonstr2 = '{"managedMissionId":%s}'% req[0]
